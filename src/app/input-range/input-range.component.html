@@ -1,0 +1,6 @@
+<div class="input-range-wrapper">
+  <span class="min-range">{{ minValue }}</span>
+  <span class="max-range">{{ maxValue }}</span>
+  <input #input type="range" class="input-range" [(ngModel)]="inputValue" />
+  <p class="input-value">{{ inputValue }}</p>
+</div>

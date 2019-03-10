@@ -1,0 +1,14 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.app {
+    background-color: #FAFAFA;
+    text-align: center;
+    padding: 20px;
+}
+
+.input-section {
+    margin: 0 auto;
+    display: inline-block;
+}
