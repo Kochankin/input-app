@@ -27,19 +27,6 @@ describe('workspace-project App', () => {
     expect(page.getTextInput()).toEqual('1234567891');
   });
 
-  it('should display input with type range', () => {
-    expect(page.getInputRange()).toEqual('range');
-  });
-
-  it('should check range value output', () => {
-    const output = page.getOutputRangeValue();
-    expect(page.getRangeValue()).toEqual(output);
-  });
-
-  it('should display input with type date', () => {
-    expect(page.getInputDate()).toEqual('date');
-  });
-
   afterEach(async () => {
     // Assert that there are no errors emitted from the browser
     const logs = await browser.manage().logs().get(logging.Type.BROWSER);

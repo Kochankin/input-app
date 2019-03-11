@@ -1,21 +1,8 @@
-<div class="input-wrapper" [ngSwitch]="type">
-  <app-input-number
-    *ngSwitchCase="'number'"
-    [minNumber]="minNumber"
-    [maxNumber]="maxNumber"
-  ></app-input-number>
-
-  <app-input-range
-    *ngSwitchCase="'range'"
-    [minValue]="minValue"
-    [maxValue]="maxValue"
-  ></app-input-range>
-
-  <app-input-date
-    *ngSwitchCase="'date'"
-    [minDate]="minDate"
-    [maxDate]="minDate"
-  ></app-input-date>
-
-  <app-input-text *ngSwitchDefault [maxLength]="maxLength"></app-input-text>
-</div>
+<input
+  #input
+  type="text"
+  [placeholder]="placeholder"
+  [class]="className"
+  [(ngModel)]="inputValue"
+  (keydown)="onChange($event)"
+/>

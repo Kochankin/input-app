@@ -10,5 +10,6 @@
 
 .input-section {
     margin: 0 auto;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
 }

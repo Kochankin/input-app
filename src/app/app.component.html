@@ -1,24 +1,8 @@
 <div class="app">
   <h1>Main</h1>
   <section class="input-section">
-    <app-input-component
-      type="{{ numberType }}"
-      minNumber="0"
-      maxNumber="5"
-    ></app-input-component>
-    <app-input-component
-      type="{{ textType }}"
-      maxLength="10"
-    ></app-input-component>
-    <app-input-component
-      type="{{ rangeType }}"
-      minValue="1"
-      maxValue="10"
-    ></app-input-component>
-    <app-input-component
-      type="{{ dateType }}"
-      minDate="2019-01-01"
-      maxDate="2019-12-31"
-    ></app-input-component>
+    <input-component inputType="number"></input-component>
+    <input-component inputType="text"></input-component>
+    <input-component inputType="password"></input-component>
   </section>
 </div>

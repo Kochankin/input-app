@@ -1,6 +1,14 @@
-.input-wrapper {
-    margin-bottom: 30px;
-    width: 400px;
-    display: flex;
-    flex-direction: column;
+input {
+  height: 20px;
+  border-radius: 5px;
+  border: 1px solid lightgray;
+  margin-bottom: 20px;
 }
+
+input::placeholder {
+  text-align: center;
+  color: grey;
+}
+
+
+
