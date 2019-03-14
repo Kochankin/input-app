@@ -10,10 +10,29 @@ input::placeholder {
   color: grey;
 }
 
+.error {
+  color: red;
+  font-size: 0.7rem;
+  position: absolute;
+  bottom: 5px;
+}
+
 .double-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.double-wrapper.input-number-range {
+  flex-direction: row;
+}
+
+.error.input-number-range {
+  bottom: -15px;
+}
+
+.input-number-range{
+  margin: 0 10px;
 }
 
 .input-wrapper {
@@ -22,9 +41,5 @@ input::placeholder {
   align-items: center;
   position: relative;
 }
-.error {
-  color: red;
-  font-size: 0.7rem;
-  position: absolute;
-  bottom: 5px;
-}
+
+
