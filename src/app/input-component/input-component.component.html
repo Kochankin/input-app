@@ -1,8 +1,47 @@
-<input
+<!-- <input
   #input
   type="text"
   [placeholder]="placeholder"
   [class]="className"
   [(ngModel)]="inputValue"
   (keydown)="onChange($event)"
-/>
+/> -->
+
+<div class="input-wrapper" [ngSwitch]="inputStructure">
+  <input
+    #input
+    *ngSwitchCase="'single'"
+    type="text"
+    [class]="className"
+    [placeholder]="placeholder"
+    [required]="isRequired"
+    [(ngModel)]="inputValue"
+    (keydown)="onKeyDown($event)"
+    (keyup)="onKeyUp($event)"
+  />
+
+  <div *ngSwitchCase="'double'" class="double-wrapper">
+    <input
+      #inputFirst
+      type="text"
+      [class]="className"
+      [placeholder]="placeholderFirst"
+      [required]="isRequired"
+      [(ngModel)]="inputFirstValue"
+      (keydown)="onKeyDown($event)"
+      (keyup)="onKeyUp($event)"
+    />
+    <input
+      #inputSecond
+      type="text"
+      [class]="className"
+      [placeholder]="placeholderSecond"
+      [required]="isRequired"
+      [(ngModel)]="inputSecondValue"
+      (keydown)="onKeyDown($event)"
+      (keyup)="onKeyUp($event)"
+    />
+  </div>
+
+  <strong class="error"> {{ error }}</strong>
+</div>

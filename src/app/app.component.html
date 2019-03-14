@@ -1,8 +1,25 @@
 <div class="app">
-  <h1>Main</h1>
   <section class="input-section">
-    <input-component inputType="number"></input-component>
-    <input-component inputType="text"></input-component>
-    <input-component inputType="password"></input-component>
+    <h2>Text</h2>
+    <input-component inputType="text" maxLength="10"></input-component>
+
+    <h2>Password</h2>
+    <input-component inputType="text password" isRequired='true'></input-component>
+
+    <h2>Password match</h2>
+    <input-component inputType="text password match" isRequired='true'></input-component>
+
+    <h2>Password mismatch</h2>
+    <input-component inputType="text password mismatch" isRequired='true'></input-component>
+
+    <h2>Number</h2>
+    <input-component inputType="number" isRequired='false'></input-component>
+
+    <h2>Range</h2>
+    <input-component
+      inputType="number range"
+      min="10"
+      max="100"
+    ></input-component>
   </section>
 </div>
