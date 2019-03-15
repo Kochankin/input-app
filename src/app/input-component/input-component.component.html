@@ -1,32 +1,30 @@
-<div class="input-wrapper" [ngSwitch]="inputStructure">
+<div class="input-wrapper">
   <input
     #input
-    *ngSwitchCase="'single'"
-    type="text"
+    *ngIf="!isDouble"
     [class]="className"
-    [placeholder]="placeholder"
+    [appPlaceholder]="inputType"
     [required]="!!isRequired"
-    [(ngModel)]="inputValue"
+    [(ngModel)]="currValues[0]"
     (keyup)="onKeyUp($event)"
   />
 
-  <div *ngSwitchCase="'double'" class="double-wrapper {{ className }}">
+  <div *ngIf="isDouble" class="double-wrapper {{ className }}">
     <input
-      #inputFirst
-      type="text"
-      [class]="className"
-      [placeholder]="placeholderFirst"
+      #input
+      class="input-first {{className}}"
+      [appPlaceholder]="inputType"
       [required]="!!isRequired"
-      [(ngModel)]="inputFirstValue"
+      [(ngModel)]="currValues[0]"
       (keyup)="onKeyUp($event)"
     />
     <input
       #inputSecond
-      type="text"
-      [class]="className"
-      [placeholder]="placeholderSecond"
+      class="input-second {{className}}"
+      [isSecond]="true"
+      [appPlaceholder]="inputType"
       [required]="!!isRequired"
-      [(ngModel)]="inputSecondValue"
+      [(ngModel)]="currValues[1]"
       (keyup)="onKeyUp($event)"
     />
   </div>

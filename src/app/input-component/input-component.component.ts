@@ -1,20 +1,8 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from "@angular/core";
-import {
-  text,
-  number,
-  range,
-  password,
-  passwordMatch,
-  passwordMismatch
-} from "../inputTypes";
 import { numberRegex } from "../numberRegex";
-import {
-  upperLetterRegex,
-  lowerLetterRegex,
-  digitRegex,
-  specialSymRegex,
-  passwordRegex
-} from "../passwordRegExp";
+import * as regex from "../passwordRegExp";
+import { errMessages } from "../errMessages";
+import { range, passwordMatch, passwordMismatch } from "../inputTypes";
 
 @Component({
   selector: "input-component",
@@ -23,8 +11,8 @@ import {
 })
 export class InputComponentComponent implements OnInit {
   @ViewChild("input") input: ElementRef;
-  @ViewChild("inputFirst") inputFirst: ElementRef;
   @ViewChild("inputSecond") inputSecond: ElementRef;
+
   @Input() inputType: string;
   @Input() maxLength: number;
   @Input() isRequired: boolean;
@@ -32,138 +20,93 @@ export class InputComponentComponent implements OnInit {
   @Input() max: number;
 
   public error: string;
-  public placeholder: string;
-  public placeholderFirst: string;
-  public placeholderSecond: string;
+  public isDouble: boolean;
+  public currValues: string[] = [];
   public className: string;
-  public inputValue: string = "";
-  public inputFirstValue: string = "";
-  public inputSecondValue: string = "";
-  public inputStructure: string;
-
-  constructor() {}
 
   ngOnInit() {
-    this.getPlaceholder();
-    this.setInputStructure();
-    this.setMaxLength();
     this.setClass();
+    this.checkIsDoubleInput();
   }
 
   ngAfterViewInit() {
-    if (this.input) {
-      this.input.nativeElement.maxLength = this.maxLength;
-    } else {
-      this.inputFirst.nativeElement.maxLength = this.maxLength;
-      this.inputSecond.nativeElement.maxLength = this.maxLength;
+    const maxL = this.maxLength || this.inputType.includes("number") ? 5 : 500;
+    this.input.nativeElement.maxLength = maxL;
+    if (this.inputSecond) {
+      this.inputSecond.nativeElement.maxLength = maxL;
     }
   }
 
-  setInputStructure() {
-    this.inputStructure = [passwordMatch, passwordMismatch, range].includes(
+  checkIsDoubleInput() {
+    this.isDouble = [passwordMatch, passwordMismatch, range].includes(
       this.inputType
-    )
-      ? "double"
-      : "single";
+    );
   }
 
-  setMaxLength() {
-    this.maxLength = this.maxLength
-      ? this.maxLength
-      : this.inputType.includes("number")
-      ? 5
-      : 500;
-  }
-
-  setClass(){
-    const joined = this.inputType.trim().split(' ').join('-');
+  setClass() {
+    const joined = this.inputType
+      .trim()
+      .split(" ")
+      .join("-");
     this.className = `input-${joined}`;
-  }
-
-  getPlaceholder() {
-    switch (this.inputType) {
-      case text:
-        this.placeholder = "Enter some text";
-        break;
-
-      case number:
-        this.placeholder = "Enter some number";
-        break;
-
-      case range:
-        this.placeholderFirst = "Min";
-        this.placeholderSecond = "Max";
-        break;
-
-      case password:
-        this.placeholder = "Enter password";
-        break;
-
-      case passwordMatch:
-        this.placeholderFirst = "Enter password";
-        this.placeholderSecond = "Confirm the password";
-        break;
-
-      case passwordMismatch:
-        this.placeholderFirst = "Enter password";
-        this.placeholderSecond = "Enter different password";
-        break;
-    }
   }
 
   validateNumber(e) {
     const { value } = e.target;
     if (value && !numberRegex.test(value)) {
-      this.error = "Only positive numbers are allowed";
+      this.error = errMessages.positiveNum;
     } else {
       this.error = "";
+      this.inputType === range && this.validateRange();
     }
   }
 
   validatePassword(e) {
     const { value } = e.target;
-    if (value && !passwordRegex.test(value)) {
+    if (value && !regex.passwordRegex.test(value)) {
       if (value.length < 8) {
-        this.error = "Password should contain min 8 characters";
-      } else if (!upperLetterRegex.test(value)) {
-        this.error = "Password should contain at least 1 uppercase letter";
-      } else if (!lowerLetterRegex.test(value)) {
-        this.error = "Password should contain at least 1 lowercase letter";
-      } else if (!digitRegex.test(value)) {
-        this.error = "Password should contain at least 1 number";
-      } else if (!specialSymRegex.test(value)) {
-        this.error = "Password should contain at least 1 special character";
+        this.error = errMessages.passLength;
+      } else if (!regex.upperLetterRegex.test(value)) {
+        this.error = errMessages.oneUpper;
+      } else if (!regex.lowerLetterRegex.test(value)) {
+        this.error = errMessages.oneLower;
+      } else if (!regex.digitRegex.test(value)) {
+        this.error = errMessages.oneNum;
+      } else if (!regex.specialSymRegex.test(value)) {
+        this.error = errMessages.oneSpecial;
       }
     } else {
       this.error = "";
+      this.inputType === passwordMatch && this.validateMatch(e);
+      this.inputType === passwordMismatch && this.validateMismatch(e);
     }
   }
 
   validateMatch(e) {
-    const firstVal = this.inputFirst.nativeElement.value;
+    const firstVal = this.input.nativeElement.value;
     const secondVal = this.inputSecond.nativeElement.value;
     if (e.target === this.inputSecond.nativeElement && firstVal !== secondVal) {
-      this.error = "Entered passwords don`t match";
+      this.error = errMessages.passDiffer;
     } else {
       this.error = "";
     }
   }
 
   validateMismatch(e) {
-    const firstVal = this.inputFirst.nativeElement.value;
+    const firstVal = this.input.nativeElement.value;
     const secondVal = this.inputSecond.nativeElement.value;
-    if (e.target === this.inputSecond.nativeElement && firstVal === secondVal) {
-      this.error = "Entered passwords must differ";
+    if (firstVal && secondVal && e.target === this.inputSecond.nativeElement && firstVal === secondVal) {
+      this.error = errMessages.passCoincide;
     } else {
       this.error = "";
     }
   }
 
-  validateRange(e) {
-    const min = this.inputFirst.nativeElement.value;
+  validateRange() {
+    const min = this.input.nativeElement.value;
     const max = this.inputSecond.nativeElement.value;
     if (min && max && +min > +max) {
-      this.error = "Max must be larger than min";
+      this.error = errMessages.rangeErr;
     } else {
       this.error = "";
     }
@@ -171,10 +114,6 @@ export class InputComponentComponent implements OnInit {
 
   onKeyUp(e) {
     this.inputType.includes("password") && this.validatePassword(e);
-    // this.inputType === passwordMatch && this.validateMatch(e);
-    // this.inputType === passwordMismatch && this.validateMismatch(e);
     this.inputType.includes("number") && this.validateNumber(e);
-    // this.inputType === range && this.validateRange(e);
   }
-
 }
